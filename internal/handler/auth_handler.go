@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/stepanpotapov/moneyflow-go-backend/internal/models/common"
 	"github.com/stepanpotapov/moneyflow-go-backend/internal/service"
 )
 
@@ -47,12 +48,12 @@ type logoutRequest struct {
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req registerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректные данные"})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: "Некорректные данные"})
 		return
 	}
 	err := h.service.Register(context.Background(), req.Email, req.Password)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
@@ -70,12 +71,12 @@ func (h *AuthHandler) Register(c *gin.Context) {
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректные данные"})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: "Некорректные данные"})
 		return
 	}
 	tokens, err := h.service.Login(context.Background(), req.Email, req.Password)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, tokens)
@@ -93,12 +94,12 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) Logout(c *gin.Context) {
 	var req logoutRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректные данные"})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: "Некорректные данные"})
 		return
 	}
 	err := h.service.Logout(context.Background(), req.RefreshToken)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
