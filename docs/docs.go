@@ -408,8 +408,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "API для регистрации, логина и логаута пользователей",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {
