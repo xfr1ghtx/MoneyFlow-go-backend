@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/stepanpotapov/moneyflow-go-backend/internal/models/common"
+	req "github.com/stepanpotapov/moneyflow-go-backend/internal/models/request"
 	"github.com/stepanpotapov/moneyflow-go-backend/internal/service"
 )
 
@@ -41,17 +42,17 @@ type logoutRequest struct {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body request.RegisterRequest true "Данные для регистрации"
-// @Success 200 {object} response.MessageResponse
+// @Param input body req.RegisterRequest true "Данные для регистрации"
+// @Success 200 {object} resp.MessageResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
-	var req registerRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var reqBody req.RegisterRequest
+	if err := c.ShouldBindJSON(&reqBody); err != nil {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: "Некорректные данные"})
 		return
 	}
-	err := h.service.Register(context.Background(), req.Email, req.Password)
+	err := h.service.Register(context.Background(), reqBody.Email, reqBody.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: err.Error()})
 		return
@@ -64,17 +65,17 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body request.LoginRequest true "Данные для входа"
-// @Success 200 {object} response.TokensResponse
+// @Param input body req.LoginRequest true "Данные для входа"
+// @Success 200 {object} resp.TokensResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
-	var req loginRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var reqBody req.LoginRequest
+	if err := c.ShouldBindJSON(&reqBody); err != nil {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: "Некорректные данные"})
 		return
 	}
-	tokens, err := h.service.Login(context.Background(), req.Email, req.Password)
+	tokens, err := h.service.Login(context.Background(), reqBody.Email, reqBody.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: err.Error()})
 		return
@@ -87,17 +88,17 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body request.LogoutRequest true "Refresh токен для логаута"
-// @Success 200 {object} response.MessageResponse
+// @Param input body req.LogoutRequest true "Refresh токен для логаута"
+// @Success 200 {object} resp.MessageResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
-	var req logoutRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var reqBody req.LogoutRequest
+	if err := c.ShouldBindJSON(&reqBody); err != nil {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: "Некорректные данные"})
 		return
 	}
-	err := h.service.Logout(context.Background(), req.RefreshToken)
+	err := h.service.Logout(context.Background(), reqBody.RefreshToken)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, common.ErrorResponse{StatusCode: http.StatusBadRequest, Message: err.Error()})
 		return
