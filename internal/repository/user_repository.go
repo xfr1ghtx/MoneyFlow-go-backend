@@ -2,18 +2,10 @@ package repository
 
 import (
 	"context"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/stepanpotapov/moneyflow-go-backend/internal/models/user"
 )
-
-// User представляет пользователя системы.
-type User struct {
-	ID           int       // Уникальный идентификатор пользователя
-	Email        string    // Email пользователя
-	PasswordHash string    // Хеш пароля пользователя
-	CreatedAt    time.Time // Дата и время создания пользователя
-}
 
 // UserRepository предоставляет методы для работы с пользователями в базе данных.
 type UserRepository struct {
@@ -32,9 +24,9 @@ func (r *UserRepository) Create(ctx context.Context, email, passwordHash string)
 }
 
 // FindByEmail ищет пользователя по email. Возвращает пользователя или ошибку, если не найден.
-func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*User, error) {
+func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*user.User, error) {
 	row := r.db.QueryRow(ctx, `SELECT id, email, password_hash, created_at FROM users WHERE email = $1`, email)
-	var u User
+	var u user.User
 	err := row.Scan(&u.ID, &u.Email, &u.PasswordHash, &u.CreatedAt)
 	if err != nil {
 		return nil, err

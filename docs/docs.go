@@ -15,6 +15,153 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/accounts": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Создать банковский аккаунт",
+                "parameters": [
+                    {
+                        "description": "Данные аккаунта",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.bankAccountRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/repository.BankAccount"
+                        }
+                    },
+                    "400": {
+                        "description": "ошибка",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Неавторизован",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Обновить банковский аккаунт",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID аккаунта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Данные аккаунта",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.bankAccountRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/repository.BankAccount"
+                        }
+                    },
+                    "400": {
+                        "description": "ошибка",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Неавторизован",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "accounts"
+                ],
+                "summary": "Удалить банковский аккаунт",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID аккаунта",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "ошибка",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Неавторизован",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "consumes": [
@@ -134,6 +281,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handler.bankAccountRequest": {
+            "type": "object",
+            "required": [
+                "balance",
+                "currency",
+                "name"
+            ],
+            "properties": {
+                "balance": {
+                    "description": "Баланс",
+                    "type": "number"
+                },
+                "currency": {
+                    "description": "Валюта",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Название",
+                    "type": "string"
+                }
+            }
+        },
         "handler.loginRequest": {
             "type": "object",
             "required": [
@@ -180,6 +349,39 @@ const docTemplate = `{
                 }
             }
         },
+        "repository.BankAccount": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "description": "Баланс",
+                    "type": "number"
+                },
+                "createdAt": {
+                    "description": "Дата создания",
+                    "type": "string"
+                },
+                "currency": {
+                    "description": "Валюта",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Уникальный идентификатор аккаунта",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Название аккаунта",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "Дата обновления",
+                    "type": "string"
+                },
+                "userID": {
+                    "description": "ID пользователя",
+                    "type": "integer"
+                }
+            }
+        },
         "service.Tokens": {
             "type": "object",
             "properties": {
@@ -206,6 +408,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "API для регистрации, логина и логаута пользователей",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

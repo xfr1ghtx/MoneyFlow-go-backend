@@ -1,5 +1,21 @@
 basePath: /
 definitions:
+  handler.bankAccountRequest:
+    properties:
+      balance:
+        description: Баланс
+        type: number
+      currency:
+        description: Валюта
+        type: string
+      name:
+        description: Название
+        type: string
+    required:
+    - balance
+    - currency
+    - name
+    type: object
   handler.loginRequest:
     properties:
       email:
@@ -32,6 +48,30 @@ definitions:
     - email
     - password
     type: object
+  repository.BankAccount:
+    properties:
+      balance:
+        description: Баланс
+        type: number
+      createdAt:
+        description: Дата создания
+        type: string
+      currency:
+        description: Валюта
+        type: string
+      id:
+        description: Уникальный идентификатор аккаунта
+        type: integer
+      name:
+        description: Название аккаунта
+        type: string
+      updatedAt:
+        description: Дата обновления
+        type: string
+      userID:
+        description: ID пользователя
+        type: integer
+    type: object
   service.Tokens:
     properties:
       access_token:
@@ -48,6 +88,98 @@ info:
   title: MoneyFlow API
   version: "1.0"
 paths:
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные аккаунта
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.bankAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.BankAccount'
+        "400":
+          description: ошибка
+          schema:
+            type: string
+        "401":
+          description: Неавторизован
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Создать банковский аккаунт
+      tags:
+      - accounts
+  /accounts/{id}:
+    delete:
+      parameters:
+      - description: ID аккаунта
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: ошибка
+          schema:
+            type: string
+        "401":
+          description: Неавторизован
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Удалить банковский аккаунт
+      tags:
+      - accounts
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID аккаунта
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные аккаунта
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.bankAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/repository.BankAccount'
+        "400":
+          description: ошибка
+          schema:
+            type: string
+        "401":
+          description: Неавторизован
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Обновить банковский аккаунт
+      tags:
+      - accounts
   /login:
     post:
       consumes:

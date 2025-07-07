@@ -19,6 +19,11 @@ import (
 
 	// Загрузка .env
 	"github.com/joho/godotenv"
+
+	// Импорты моделей для явного использования, если потребуется
+	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/account"
+	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/token"
+	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/user"
 )
 
 // @title MoneyFlow API
@@ -46,11 +51,16 @@ func main() {
 	}
 	defer pool.Close()
 
-	// Инициализируем репозитории, сервис и обработчик для авторизации
+	// Инициализируем репозитории, сервисы и обработчики
 	repo := repository.NewUserRepository(pool)
 	refreshRepo := repository.NewRefreshTokenRepository(pool)
 	authService := service.NewAuthService(repo, refreshRepo, os.Getenv("JWT_SECRET"))
 	authHandler := handler.NewAuthHandler(authService)
+
+	// --- банковские аккаунты ---
+	bankAccountRepo := repository.NewBankAccountRepository(pool)
+	bankAccountService := service.NewBankAccountService(bankAccountRepo)
+	bankAccountHandler := handler.NewBankAccountHandler(bankAccountService, os.Getenv("JWT_SECRET"))
 
 	// Создаём новый роутер Gin с логированием и обработкой паник
 	r := gin.New()
@@ -61,6 +71,11 @@ func main() {
 	r.POST("/register", authHandler.Register)
 	r.POST("/login", authHandler.Login)
 	r.POST("/logout", authHandler.Logout)
+
+	// Банковские аккаунты (требуют авторизации)
+	r.POST("/accounts", bankAccountHandler.CreateBankAccount)
+	r.PUT("/accounts/:id", bankAccountHandler.UpdateBankAccount)
+	r.DELETE("/accounts/:id", bankAccountHandler.DeleteBankAccount)
 
 	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

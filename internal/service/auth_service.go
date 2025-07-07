@@ -13,9 +13,9 @@ import (
 
 // AuthService реализует бизнес-логику аутентификации и регистрации пользователей.
 type AuthService struct {
-	repo        *repository.UserRepository         // Репозиторий пользователей
-	refreshRepo *repository.RefreshTokenRepository // Репозиторий refresh токенов
-	jwtSecret   string                             // Секрет для подписи JWT
+	repo        *repository.UserRepository
+	refreshRepo *repository.RefreshTokenRepository
+	jwtSecret   string
 }
 
 // Tokens содержит access и refresh токены для пользователя.
@@ -43,24 +43,24 @@ func (s *AuthService) Register(ctx context.Context, email, password string) erro
 
 // Login выполняет аутентификацию пользователя по email и паролю, возвращает токены и сохраняет refresh токен в БД.
 func (s *AuthService) Login(ctx context.Context, email, password string) (*Tokens, error) {
-	user, err := s.repo.FindByEmail(ctx, email)
+	userObj, err := s.repo.FindByEmail(ctx, email)
 	if err != nil {
 		return nil, errors.New("Неверный email или пароль")
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(userObj.PasswordHash), []byte(password)); err != nil {
 		return nil, errors.New("Неверный email или пароль")
 	}
-	access, err := s.generateToken(user.ID, user.Email, 15*time.Minute)
+	access, err := s.generateToken(userObj.ID, userObj.Email, 15*time.Minute)
 	if err != nil {
 		return nil, err
 	}
-	refresh, err := s.generateToken(user.ID, user.Email, 7*24*time.Hour)
+	refresh, err := s.generateToken(userObj.ID, userObj.Email, 7*24*time.Hour)
 	if err != nil {
 		return nil, err
 	}
-	// Сохраняем refresh токен в БД
 	expiresAt := time.Now().Add(7 * 24 * time.Hour)
-	err = s.refreshRepo.Save(ctx, user.ID, refresh, expiresAt)
+	createdAt := time.Now()
+	err = s.refreshRepo.Save(ctx, userObj.ID, refresh, expiresAt, createdAt)
 	if err != nil {
 		return nil, errors.New("Ошибка сохранения refresh токена")
 	}
