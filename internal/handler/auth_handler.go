@@ -20,30 +20,13 @@ func NewAuthHandler(service *service.AuthService) *AuthHandler {
 	return &AuthHandler{service: service}
 }
 
-// registerRequest описывает структуру запроса для регистрации.
-type registerRequest struct {
-	Email    string `json:"email" binding:"required,email"` // Email пользователя
-	Password string `json:"password" binding:"required"`    // Пароль пользователя
-}
-
-// loginRequest описывает структуру запроса для логина.
-type loginRequest struct {
-	Email    string `json:"email" binding:"required,email"` // Email пользователя
-	Password string `json:"password" binding:"required"`    // Пароль пользователя
-}
-
-// logoutRequest описывает структуру запроса для логаута.
-type logoutRequest struct {
-	RefreshToken string `json:"refresh_token" binding:"required"` // Refresh токен
-}
-
 // Register обрабатывает запрос на регистрацию пользователя.
 // @Summary Регистрация
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body req.RegisterRequest true "Данные для регистрации"
-// @Success 200 {object} resp.MessageResponse
+// @Param input body request.RegisterRequest true "Данные для регистрации"
+// @Success 200 {object} response.MessageResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
@@ -65,8 +48,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body req.LoginRequest true "Данные для входа"
-// @Success 200 {object} resp.TokensResponse
+// @Param input body request.LoginRequest true "Данные для входа"
+// @Success 200 {object} response.TokensResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -88,8 +71,8 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body req.LogoutRequest true "Refresh токен для логаута"
-// @Success 200 {object} resp.MessageResponse
+// @Param input body request.LogoutRequest true "Refresh токен для логаута"
+// @Success 200 {object} response.MessageResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {

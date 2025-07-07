@@ -39,7 +39,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handler.bankAccountRequest"
+                            "$ref": "#/definitions/request.BankAccountRequest"
                         }
                     }
                 ],
@@ -47,7 +47,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/repository.BankAccount"
+                            "$ref": "#/definitions/account.BankAccount"
                         }
                     },
                     "400": {
@@ -104,7 +104,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/repository.BankAccount"
+                            "$ref": "#/definitions/account.BankAccount"
                         }
                     },
                     "400": {
@@ -142,9 +142,9 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageResponse"
                         }
                     },
                     "400": {
@@ -181,7 +181,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handler.loginRequest"
+                            "$ref": "#/definitions/request.LoginRequest"
                         }
                     }
                 ],
@@ -189,7 +189,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/service.Tokens"
+                            "$ref": "#/definitions/response.TokensResponse"
                         }
                     },
                     "400": {
@@ -220,15 +220,15 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handler.logoutRequest"
+                            "$ref": "#/definitions/request.LogoutRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageResponse"
                         }
                     },
                     "400": {
@@ -259,15 +259,15 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handler.registerRequest"
+                            "$ref": "#/definitions/request.RegisterRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.MessageResponse"
                         }
                     },
                     "400": {
@@ -281,75 +281,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handler.bankAccountRequest": {
-            "type": "object",
-            "required": [
-                "balance",
-                "currency",
-                "name"
-            ],
-            "properties": {
-                "balance": {
-                    "description": "Баланс",
-                    "type": "number"
-                },
-                "currency": {
-                    "description": "Валюта",
-                    "type": "string"
-                },
-                "name": {
-                    "description": "Название",
-                    "type": "string"
-                }
-            }
-        },
-        "handler.loginRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "description": "Email пользователя",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "Пароль пользователя",
-                    "type": "string"
-                }
-            }
-        },
-        "handler.logoutRequest": {
-            "type": "object",
-            "required": [
-                "refresh_token"
-            ],
-            "properties": {
-                "refresh_token": {
-                    "description": "Refresh токен",
-                    "type": "string"
-                }
-            }
-        },
-        "handler.registerRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "description": "Email пользователя",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "Пароль пользователя",
-                    "type": "string"
-                }
-            }
-        },
-        "repository.BankAccount": {
+        "account.BankAccount": {
             "type": "object",
             "properties": {
                 "balance": {
@@ -382,15 +314,103 @@ const docTemplate = `{
                 }
             }
         },
-        "service.Tokens": {
+        "handler.bankAccountRequest": {
+            "type": "object",
+            "required": [
+                "balance",
+                "currency",
+                "name"
+            ],
+            "properties": {
+                "balance": {
+                    "description": "Баланс",
+                    "type": "number"
+                },
+                "currency": {
+                    "description": "Валюта",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Название",
+                    "type": "string"
+                }
+            }
+        },
+        "request.BankAccountRequest": {
+            "type": "object",
+            "required": [
+                "balance",
+                "currency",
+                "name"
+            ],
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.LogoutRequest": {
+            "type": "object",
+            "required": [
+                "refresh_token"
+            ],
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.MessageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.TokensResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
-                    "description": "JWT access token",
                     "type": "string"
                 },
                 "refresh_token": {
-                    "description": "JWT refresh token",
                     "type": "string"
                 }
             }

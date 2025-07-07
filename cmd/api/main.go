@@ -22,6 +22,8 @@ import (
 
 	// Импорты моделей для явного использования, если потребуется
 	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/account"
+	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/request"
+	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/response"
 	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/token"
 	_ "github.com/stepanpotapov/moneyflow-go-backend/internal/models/user"
 )
