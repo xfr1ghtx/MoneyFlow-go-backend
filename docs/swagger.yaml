@@ -24,6 +24,15 @@ definitions:
         description: ID пользователя
         type: integer
     type: object
+  common.ErrorResponse:
+    properties:
+      message:
+        description: Сообщение с деталями ошибки
+        type: string
+      statusCode:
+        description: HTTP статус ошибки
+        type: integer
+    type: object
   handler.bankAccountRequest:
     properties:
       balance:
@@ -120,7 +129,7 @@ paths:
         "400":
           description: ошибка
           schema:
-            type: string
+            $ref: '#/definitions/common.ErrorResponse'
         "401":
           description: Неавторизован
           schema:
@@ -146,7 +155,7 @@ paths:
         "400":
           description: ошибка
           schema:
-            type: string
+            $ref: '#/definitions/common.ErrorResponse'
         "401":
           description: Неавторизован
           schema:
@@ -181,7 +190,7 @@ paths:
         "400":
           description: ошибка
           schema:
-            type: string
+            $ref: '#/definitions/common.ErrorResponse'
         "401":
           description: Неавторизован
           schema:
@@ -212,7 +221,7 @@ paths:
         "400":
           description: ошибка
           schema:
-            type: string
+            $ref: '#/definitions/common.ErrorResponse'
       summary: Логин
       tags:
       - auth
@@ -237,7 +246,7 @@ paths:
         "400":
           description: ошибка
           schema:
-            type: string
+            $ref: '#/definitions/common.ErrorResponse'
       summary: Логаут
       tags:
       - auth
@@ -262,7 +271,7 @@ paths:
         "400":
           description: ошибка
           schema:
-            type: string
+            $ref: '#/definitions/common.ErrorResponse'
       summary: Регистрация
       tags:
       - auth

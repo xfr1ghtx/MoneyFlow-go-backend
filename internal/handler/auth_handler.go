@@ -27,7 +27,7 @@ func NewAuthHandler(service *service.AuthService) *AuthHandler {
 // @Produce json
 // @Param input body request.RegisterRequest true "Данные для регистрации"
 // @Success 200 {object} response.MessageResponse
-// @Failure 400 {string} string "ошибка"
+// @Failure 400 {object} common.ErrorResponse "ошибка"
 // @Router /register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
 	var reqBody req.RegisterRequest
@@ -50,7 +50,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // @Produce json
 // @Param input body request.LoginRequest true "Данные для входа"
 // @Success 200 {object} response.TokensResponse
-// @Failure 400 {string} string "ошибка"
+// @Failure 400 {object} common.ErrorResponse "ошибка"
 // @Router /login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	var reqBody req.LoginRequest
@@ -73,7 +73,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Produce json
 // @Param input body request.LogoutRequest true "Refresh токен для логаута"
 // @Success 200 {object} response.MessageResponse
-// @Failure 400 {string} string "ошибка"
+// @Failure 400 {object} common.ErrorResponse "ошибка"
 // @Router /logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
 	var reqBody req.LogoutRequest

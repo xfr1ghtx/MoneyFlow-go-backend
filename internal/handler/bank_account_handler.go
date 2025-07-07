@@ -65,7 +65,7 @@ func (h *BankAccountHandler) getUserIDFromToken(c *gin.Context) (int, error) {
 // @Produce json
 // @Param input body request.BankAccountRequest true "Данные аккаунта"
 // @Success 200 {object} account.BankAccount
-// @Failure 400 {string} string "ошибка"
+// @Failure 400 {object} common.ErrorResponse "ошибка"
 // @Failure 401 {string} string "Неавторизован"
 // @Security BearerAuth
 // @Router /accounts [post]
@@ -96,7 +96,7 @@ func (h *BankAccountHandler) CreateBankAccount(c *gin.Context) {
 // @Param id path int true "ID аккаунта"
 // @Param input body bankAccountRequest true "Данные аккаунта"
 // @Success 200 {object} account.BankAccount
-// @Failure 400 {string} string "ошибка"
+// @Failure 400 {object} common.ErrorResponse "ошибка"
 // @Failure 401 {string} string "Неавторизован"
 // @Security BearerAuth
 // @Router /accounts/{id} [put]
@@ -130,7 +130,7 @@ func (h *BankAccountHandler) UpdateBankAccount(c *gin.Context) {
 // @Tags accounts
 // @Param id path int true "ID аккаунта"
 // @Success 200 {object} response.MessageResponse
-// @Failure 400 {string} string "ошибка"
+// @Failure 400 {object} common.ErrorResponse "ошибка"
 // @Failure 401 {string} string "Неавторизован"
 // @Security BearerAuth
 // @Router /accounts/{id} [delete]

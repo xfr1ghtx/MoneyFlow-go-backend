@@ -54,7 +54,7 @@ const docTemplate = `{
                     "400": {
                         "description": "ошибка",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     },
                     "401": {
@@ -111,7 +111,7 @@ const docTemplate = `{
                     "400": {
                         "description": "ошибка",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     },
                     "401": {
@@ -151,7 +151,7 @@ const docTemplate = `{
                     "400": {
                         "description": "ошибка",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     },
                     "401": {
@@ -196,7 +196,7 @@ const docTemplate = `{
                     "400": {
                         "description": "ошибка",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     }
                 }
@@ -235,7 +235,7 @@ const docTemplate = `{
                     "400": {
                         "description": "ошибка",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     }
                 }
@@ -274,7 +274,7 @@ const docTemplate = `{
                     "400": {
                         "description": "ошибка",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/common.ErrorResponse"
                         }
                     }
                 }
@@ -311,6 +311,19 @@ const docTemplate = `{
                 },
                 "userID": {
                     "description": "ID пользователя",
+                    "type": "integer"
+                }
+            }
+        },
+        "common.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "description": "Сообщение с деталями ошибки",
+                    "type": "string"
+                },
+                "statusCode": {
+                    "description": "HTTP статус ошибки",
                     "type": "integer"
                 }
             }
