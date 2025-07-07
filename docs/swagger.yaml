@@ -1,0 +1,128 @@
+basePath: /
+definitions:
+  handler.loginRequest:
+    properties:
+      email:
+        description: Email пользователя
+        type: string
+      password:
+        description: Пароль пользователя
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handler.logoutRequest:
+    properties:
+      refresh_token:
+        description: Refresh токен
+        type: string
+    required:
+    - refresh_token
+    type: object
+  handler.registerRequest:
+    properties:
+      email:
+        description: Email пользователя
+        type: string
+      password:
+        description: Пароль пользователя
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  service.Tokens:
+    properties:
+      access_token:
+        description: JWT access token
+        type: string
+      refresh_token:
+        description: JWT refresh token
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API для регистрации, логина и логаута пользователей
+  title: MoneyFlow API
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные для входа
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.Tokens'
+        "400":
+          description: ошибка
+          schema:
+            type: string
+      summary: Логин
+      tags:
+      - auth
+  /logout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Refresh токен для логаута
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.logoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: ошибка
+          schema:
+            type: string
+      summary: Логаут
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.registerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+        "400":
+          description: ошибка
+          schema:
+            type: string
+      summary: Регистрация
+      tags:
+      - auth
+schemes:
+- http
+swagger: "2.0"
