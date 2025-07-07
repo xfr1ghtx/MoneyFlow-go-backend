@@ -41,8 +41,8 @@ type logoutRequest struct {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body registerRequest true "Данные для регистрации"
-// @Success 200 {string} string "ok"
+// @Param input body request.RegisterRequest true "Данные для регистрации"
+// @Success 200 {object} response.MessageResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /register [post]
 func (h *AuthHandler) Register(c *gin.Context) {
@@ -64,8 +64,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body loginRequest true "Данные для входа"
-// @Success 200 {object} service.Tokens
+// @Param input body request.LoginRequest true "Данные для входа"
+// @Success 200 {object} response.TokensResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -87,8 +87,8 @@ func (h *AuthHandler) Login(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param input body logoutRequest true "Refresh токен для логаута"
-// @Success 200 {string} string "ok"
+// @Param input body request.LogoutRequest true "Refresh токен для логаута"
+// @Success 200 {object} response.MessageResponse
 // @Failure 400 {string} string "ошибка"
 // @Router /logout [post]
 func (h *AuthHandler) Logout(c *gin.Context) {
