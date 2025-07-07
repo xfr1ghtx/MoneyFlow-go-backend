@@ -13,12 +13,16 @@ COPY . .
 WORKDIR /app/cmd/api
 RUN go build -o /app/app .
 
+# Устанавливаем goose для миграций
+RUN go install github.com/pressly/goose/v3/cmd/goose@latest
+
 # --- Release image ---
 FROM alpine:latest
 
 WORKDIR /app
 
 COPY --from=builder /app/app .
+COPY --from=builder /go/bin/goose /usr/local/bin/goose
 
 # Копируем .env, если он есть
 COPY .env .env
