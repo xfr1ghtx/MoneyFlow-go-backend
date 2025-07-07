@@ -23,6 +23,7 @@ WORKDIR /app
 
 COPY --from=builder /app/app .
 COPY --from=builder /go/bin/goose /usr/local/bin/goose
+COPY --from=builder /app/migrations ./migrations
 
 # Копируем .env, если он есть
 COPY .env .env
